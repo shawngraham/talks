@@ -374,6 +374,11 @@ see
 <li>but manually annotating documents is a poor use of human resources</li>
 <li>maybe LLMs could be useful here?</li>
 <li>We re-ran our study using a knowledge graph where we fed each original trafficking culture article to gpt3.5. Summarization is one thing LLMs are good at because they are ultimately models of word use; their architecture goes back to uses of neural networks to facilitate translation from one language to another. What we ask the model to do then is a combination of both summarization and translation to the key ideas in the source document</li>
+<li>llms are lossy compressed versions of the whole internet, what andrej Karpathy calls a 'gestalt of the text' which is really great at next-word prediction (pre-training stage)
+<li>then they get fine-tuned on human paired instruction datasets - maybe 100 000 pairs. So now if you pick a word or sentence at random, the generated next-obvious-word makes a lot more sense
+<li>then you compare pairs of results for the same prompt, and pick the better result - this is reinforcement learning from human feedback
+<li>and in this way you end up with a model of language that you can drop trafficking antiquity articles through and end up with it correctly pulling out subject,predicate,object triplets
+<li> Other natural language processing techniques like relationship extraction depends on trained language models where you have thousands of labelled examples of what you want. Any of the available models we tried missed things like artefacts and proper names and co-reference resolution (things like which 'he' is being referred to?) - the LLM was better at the task with less fuss and muss.
 </ul>
 </aside></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
 <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
@@ -472,7 +477,15 @@ RAG + KG Embedding Model
 </div>
 
 <aside class="notes"><p>I have 5000 newspaper articles, and the offshore leaks database. I am using gpt4 to iterate over the newspaper articles to turn into a knowledge graph that I add to the existing graph. I am developing code to match names from this expanded graph to those in the offshore leaks database, and then incorporate THAT knowledge.</p>
-<p>I am then using &#39;Retrieve, Augment, Generate&#39; or RAG approaches to create a natural language interface with all of this information, constrained by the knowledge graph. My goal is to have a dialogue where we can think out loud with our sources, the true things we know, to help us move from the known knowns to the things we didn&#39;t know we knew.</p>
+<p>I am then using &#39;Retrieve, Augment, Generate&#39; or RAG approaches to create a natural language interface with all of this information, constrained by the knowledge graph. 
+- you take your documents and treat them as a datastore outside the LLM's training data. Drop *them* through an embedding model so that each document is itself represented by a vector.
+- then the user prompt is converted into a vector, and used to select the closest relevant documents
+- these documents are then fed, along with your initial prompt, into the LLM to do the creative writing bit.
+- i want to use the knowledge graph as part of the search query portion and use that to power retrieval of documents - it would retrieve leonardo patterson AND the brooklyn museum, and then any other pertinent documents, and give us a summary result
+
+the idea is I want to be able to generate hypotheticals and quickly find interesting leads *and the supporting information* - a star trek computer 
+
+My goal is to have a dialogue where we can think out loud with our sources, the true things we know, to help us move from the known knowns to the things we didn&#39;t know we knew.</p>
 </aside></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
 <div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
 
